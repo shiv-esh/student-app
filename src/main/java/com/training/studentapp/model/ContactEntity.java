@@ -1,61 +1,69 @@
 package com.training.studentapp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name="contact",schema="stdapp")
+@Table(name = "contact", schema = "studentapp")
 public class ContactEntity {
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int stdid;
-	
+	@Column(name = "stud_id")
+	private Integer studId;
 
-@Column
-private int phone;
+	@Column
+	private String phone;
 
-@Column
-private String email;
+	@Column
+	private String email;
 
-@Column
-private String address;
+	@Column
+	private String address;
 
-public int getStudid() {
-	return stdid;
-}
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "stud_id")
+	@JsonIgnore
+	private StudentEntity student;
 
-public void setStudid(int stdid) {
-	this.stdid = stdid;
-}
+	public Integer getStudId() {
+		return studId;
+	}
 
-public int getPhone() {
-	return phone;
-}
+	public void setStudId(Integer studId) {
+		this.studId = studId;
+	}
 
-public void setPhone(int phone) {
-	this.phone = phone;
-}
+	public String getPhone() {
+		return phone;
+	}
 
-public String getEmail() {
-	return email;
-}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-public void setEmail(String email) {
-	this.email = email;
-}
+	public String getEmail() {
+		return email;
+	}
 
-public String getAddress() {
-	return address;
-}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-public void setAddress(String address) {
-	this.address = address;
-}
+	public String getAddress() {
+		return address;
+	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
+	public StudentEntity getStudent() {
+		return student;
+	}
 
+	public void setStudent(StudentEntity student) {
+		this.student = student;
+	}
 }

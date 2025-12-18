@@ -2,42 +2,49 @@ package com.training.studentapp.model;
 
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name ="subjects",schema="stdapp")
+@Table(name = "subjects", schema = "studentapp")
 public class MarksEntity {
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int stdid;
-	
-	
-	
+	@Column(name = "stud_id")
+	private Integer studId;
+
 	@Column
 	private int java;
-	
+
 	@Column
-	private int Spring;
+	private int spring;
+
 	@Column
-	private int Hibernate;
+	private int hibernate;
+
 	@Column
-	private int Microservices;
+	private int microservices;
+
 	@Column
-	private int Angular;
-	
-	@javax.persistence.Transient
+	private int angular;
+
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "stud_id")
+	@JsonIgnore
+	private StudentEntity student;
+
+	@Transient
 	private float percentage;
-	
-	@javax.persistence.Transient
+
+	@Transient
 	private String result;
-	
+
+
+
 	public float getPercentage() {
-		int sum =this.Angular+this.Hibernate+this.java+this.Microservices+this.Spring;
+		int sum =this.angular+this.hibernate+this.java+this.microservices +this.spring;
 		this.percentage=(sum/(float)500)*100;
 		return this.percentage;
 	}
@@ -51,45 +58,68 @@ public class MarksEntity {
 		return this.result;
 			
 	}
-	
-	
-	
-	public int getStudid() {
-		return stdid;
+
+	public Integer getStudId() {
+		return studId;
 	}
-	public void setStudid(int stdid) {
-		this.stdid = stdid;
+
+	public void setStudId(Integer studId) {
+		this.studId = studId;
 	}
+
 	public int getJava() {
 		return java;
 	}
+
 	public void setJava(int java) {
 		this.java = java;
 	}
+
 	public int getSpring() {
-		return Spring;
+		return spring;
 	}
+
 	public void setSpring(int spring) {
-		Spring = spring;
+		this.spring = spring;
 	}
+
 	public int getHibernate() {
-		return Hibernate;
+		return hibernate;
 	}
+
 	public void setHibernate(int hibernate) {
-		Hibernate = hibernate;
+		this.hibernate = hibernate;
 	}
+
 	public int getMicroservices() {
-		return Microservices;
+		return microservices;
 	}
+
 	public void setMicroservices(int microservices) {
-		Microservices = microservices;
+		this.microservices = microservices;
 	}
+
 	public int getAngular() {
-		return Angular;
+		return angular;
 	}
-	
-	
+
 	public void setAngular(int angular) {
-		Angular = angular;
+		this.angular = angular;
+	}
+
+	public StudentEntity getStudent() {
+		return student;
+	}
+
+	public void setStudent(StudentEntity student) {
+		this.student = student;
+	}
+
+	public void setPercentage(float percentage) {
+		this.percentage = percentage;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
 	}
 }

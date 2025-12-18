@@ -9,44 +9,61 @@ import org.springframework.stereotype.Service;
 
 import com.training.studentapp.model.StudentEntity;
 import com.training.studentapp.model.MarksEntity;
-import com.training.studentapp.repo.MarksRepo;
-import com.training.studentapp.repo.StudentRepo;
+import com.training.studentapp.repo.MarksRepository;
+import com.training.studentapp.repo.StudentRepository;
 
 @Service
 public class StudentService {
-@Autowired
-StudentRepo repo;
 
-@Autowired
-MarksRepo marksrepo;
-public List<StudentEntity> getStudent() {
-	return repo.findAll();
-	
-}
+    @Autowired
+    private StudentRepository studentRepository;
 
-public Optional<StudentEntity> getStudentById(int stdid) {
-	return repo.findById(stdid);
-	
-}
+    @Autowired
+    private MarksRepository marksRepository;
+
+    // Get all students
+    public List<StudentEntity> getStudent() {
+        return studentRepository.findAll();
+    }
+
+    // Get student by ID
+    public Optional<StudentEntity> getStudentById(int stdId) {
+        return studentRepository.findById(stdId);
+    }
+
+    // Save / Update student (IMPORTANT FIX HERE)
+    public String saveStud(StudentEntity student) {
+
+        // 🔥 VERY IMPORTANT FOR @MapsId
+        if (student.getMarks() != null) {
+            student.getMarks().setStudent(student);
+        }
+
+        if (student.getContact() != null) {
+            student.getContact().setStudent(student);
+        }
+
+        studentRepository.save(student);
+        return "Student inserted/updated successfully";
+    }
+
+    // Delete student
+    public String deleteStud(StudentEntity student) {
+        studentRepository.delete(student);
+        return "Student deleted successfully";
+    }
+
+    // Optional: delete by ID (recommended)
+    public String deleteStudById(int studId) {
+        if (!studentRepository.existsById(studId)) {
+            return "Student not found";
+        }
+        studentRepository.deleteById(studId);
+        return "Student deleted successfully";
+    }
 
 
-public String saveStud(StudentEntity stud) {
-	repo.save(stud);
-	return "Student inserted/updated";
-}
-
-public String deleteStud(StudentEntity stud) {
-	repo.delete(stud);
-	return "Student deleted";
-}
-
-public String deleteStudById(int studId) {
-	repo.deleteById(studId);
-	return "Student deleted";
-}
-
-public Optional<MarksEntity> getMarksById(int stdid) {
-	return marksrepo.findById(stdid);
-}
-
+    public Optional<MarksEntity> getMarksById(int stdid) {
+        return marksRepository.findById(stdid);
+    }
 }
